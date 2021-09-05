@@ -1,8 +1,29 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
-class GamePage extends StatefulWidget { //เปลี่ยนค่าตัวแปรได้
+class GamePage extends StatefulWidget {
+  const GamePage({Key? key}) : super(key: key);
+
+  @override
+  _GamePageState createState() => _GamePageState();
+}
+
+class _GamePageState extends State<GamePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('GUESS THE NUMBER'),
+      ),
+      body: Container(
+        child: Text('TEST'),
+      ),
+    );
+  }
+}
+
+
+
+/*class GamePage extends StatefulWidget { //เปลี่ยนค่าตัวแปรได้
   const GamePage({Key? key}) : super(key: key);
 
   @override
@@ -74,7 +95,7 @@ class _GamePageState extends State<GamePage> {
                 fit: BoxFit.cover, //คงสัดส่วนไว้ แล้วยืดตามค่าที่กำหนด
               ),
             ],
-            /*children: [
+            *//*children: [
               for(var item in list)
                 Text(
                     item.toString(),
@@ -82,20 +103,20 @@ class _GamePageState extends State<GamePage> {
                 ),
               TextButton(
                 onPressed: _handleClickButton, //เอาฟังก์ชันมาใส่ (call back function) ไม่ใช่การ call function
-                *//*onPressed: () { //เมื่อกดปุ่มแล้วจะ เรียกฟังก์ชันนี้เพื่อ Render UI ใหม่
+                *//**//*onPressed: () { //เมื่อกดปุ่มแล้วจะ เรียกฟังก์ชันนี้เพื่อ Render UI ใหม่
                   setState(() { //เพื่อเปลี่ยนแปลงค่าตัวแปรที่แสดงผล (เรียก method build ใหม่)
                     i++;
                   });
-                },*//*
+                },*//**//*
                 child: Text('Test'),
               ),
-            ],*/
+            ],*//*
           ),
         ),
       ),
     );
   }
-}
+}*/
 
 /*class GamePage extends StatelessWidget {
   const GamePage({Key? key}) : super(key: key);
