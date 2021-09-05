@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({Key? key}) : super(key: key);
@@ -11,11 +13,57 @@ class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('GUESS THE NUMBER'),
-      ),
       body: Container(
-        child: Text('TEST'),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Image.asset(
+                        "assets/images/logo_number.png",
+                        width: 240.0, //160 = 1 inch
+                    ),
+                    Text(
+                      'GUESS THE NUMBER',
+                      style: GoogleFonts.mcLaren(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Text('TEST'),
+                //TextFormField(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.teal),
+                          )
+                          /*enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.pink),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),*/
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text("GUESS"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )
       ),
     );
   }
