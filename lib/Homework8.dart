@@ -26,8 +26,15 @@ class Viewer extends StatefulWidget {
 }
 
 class _ViewerState extends State<Viewer> {
-  var font = GoogleFonts.kanit(fontSize: 60.0);
-  var fontName = "Kanit";
+  var selected = 0;
+  var font = [
+    GoogleFonts.kanit(fontSize: 60.0),
+    GoogleFonts.charmonman(fontSize: 60.0),
+    GoogleFonts.koHo(fontSize: 60.0),
+    GoogleFonts.pattaya(fontSize: 60.0),
+    GoogleFonts.sriracha(fontSize: 60.0)
+  ];
+  var fontName = ["Kanit", "Charmonman", "KoHo", "Pattaya", "Sriracha"];
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +53,14 @@ class _ViewerState extends State<Viewer> {
                 child: Text(
                   "การเดินทางขากลับคงจะเหงาน่าดู",
                   textAlign: TextAlign.center,
-                  style: font,
+                  style: font[selected],
                 ),
               ),
             ),
             Column(
               children: [
                 Text(
-                  "Font: $fontName",
+                  "Font: ${fontName[selected]}",
                   style: TextStyle(fontSize: 20.0),
                 ),
                 Card(
@@ -63,81 +70,21 @@ class _ViewerState extends State<Viewer> {
                     padding: const EdgeInsets.all(16.0),
                     child: Wrap(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                font = GoogleFonts.kanit(fontSize: 60.0);
-                                fontName = "Kanit";
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.teal,
+                        for(var i=0; i<font.length; i++)
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  selected = i;
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.teal,
+                              ),
+                              child: Text(fontName[i].toString()),
                             ),
-                            child: Text("Kanit"),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                font = GoogleFonts.charmonman(fontSize: 60.0);
-                                fontName = "Charmonman";
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.teal,
-                            ),
-                            child: Text("Charmonman"),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                font = GoogleFonts.koHo(fontSize: 60.0);
-                                fontName = "KoHo";
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.teal,
-                            ),
-                            child: Text("KoHo"),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                font = GoogleFonts.pattaya(fontSize: 60.0);
-                                fontName = "Pattaya";
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.teal,
-                            ),
-                            child: Text("Pattaya"),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                font = GoogleFonts.sriracha(fontSize: 60.0);
-                                fontName = "Sriracha";
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.teal,
-                            ),
-                            child: Text("Sriracha"),
-                          ),
-                        ),
                       ],
                     ),
                   ),
