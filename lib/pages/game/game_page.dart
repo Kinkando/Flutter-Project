@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'game.dart';
+//import 'package:hello/pages/game/game.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({Key? key}) : super(key: key);
@@ -10,66 +13,159 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+  //Game? _game;
+  late Game _game; //initialize ทีหลัง
+  final _controller = TextEditingController();
+  String? _guessNumber;
+  String? _feedback;
+
+  @override //Ctrl+O or Code=>Override method
+  void initState() {
+    //Flutter auto call once time at first time
+    //ส่วนใหญ่จะ initialize state variable in this initState method
+    super.initState();
+    _game = Game();
+  }
+
+  @override
+  void dispose() {
+    //Clear it when finish used
+    _controller.dispose();
+    super.dispose();
+  }
+
+  /*var guess = Game();
+  var controller = TextEditingController();
+  var checkValue = 2;*/
   @override
   Widget build(BuildContext context) {
+    //Render all the time (initField)
     return Scaffold(
       body: Container(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Image.asset(
-                        "assets/images/logo_number.png",
-                        width: 240.0, //160 = 1 inch
-                    ),
-                    Text(
-                      'GUESS THE NUMBER',
-                      style: GoogleFonts.mcLaren(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Text('TEST'),
-                //TextFormField(),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal),
-                          )
-                          /*enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.pink),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),*/
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text("GUESS"),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          color: Colors.yellow.shade100,
+          /*decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/logo_number.png"),
+            fit: BoxFit.fill,
           ),
-        )
+        ),*/
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildHeader(),
+                  _buildMainContent(), //TextFormField(),
+                  _buildInputPanel(),
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+
+  //Right Click -> Refactor -> Extract Method เพื่อที่จะสร้าง method ของ Widget
+
+  Widget _buildHeader() {
+    return Column(
+      children: [
+        Image.asset(
+          "assets/images/logo_number.png",
+          width: 240.0, //160 = 1 inch
+        ),
+        Text(
+          'GUESS THE NUMBER',
+          style: GoogleFonts.mcLaren(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMainContent() {
+    return _guessNumber == null || _feedback == null
+        ? SizedBox.shrink()
+        : Column(
+            children: [
+              Text(_guessNumber!, style: GoogleFonts.kanit(fontSize: 80.0)),
+              Text(_feedback!, style: GoogleFonts.kanit(fontSize: 80.0)),
+              if(_feedback != null && _feedback!.contains('CORRECT!'))
+                TextButton(
+                  onPressed: () { //function call back
+                    _game = Game();
+                  },
+                  child: Text('NEW GAME'),
+                ),
+            ],
+          );
+  }
+
+  Widget _buildInputPanel() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.pink.shade100,
+        border: Border.all(width: 5.0),
+        borderRadius: BorderRadius.circular(20.0),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(5.0, 5.0),
+            color: Colors.grey,
+            spreadRadius: 3.0,
+            blurRadius: 5.0,
+          ),
+        ]
+      ),
+      //elevation: 10.0, Use in Card Widget to create shadow
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: TextField(
+                controller: _controller,
+                //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.teal),
+                )
+                    /*enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.pink),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),*/
+                    ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _guessNumber = _controller.text;
+                  int? guess = int.tryParse(_guessNumber!);
+                  if (guess != null) {
+                    var result = _game.doGuess(guess);
+                    _feedback = result == 0 ? 'CORRECT!':
+                        //+' total count : ${_game.totalGuesses}
+                                result == 1 ? 'TOO HIGH!' : 'TOO LOW!';
+                  }
+                  else
+                    _feedback = null;
+                  //Ctrl+Q : Document
+                  //Ctrl+P : Parameter
+                });
+              },
+              child: Text("GUESS"),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-
 
 /*class GamePage extends StatefulWidget { //เปลี่ยนค่าตัวแปรได้
   const GamePage({Key? key}) : super(key: key);
@@ -143,7 +239,7 @@ class _GamePageState extends State<GamePage> {
                 fit: BoxFit.cover, //คงสัดส่วนไว้ แล้วยืดตามค่าที่กำหนด
               ),
             ],
-            *//*children: [
+            */ /*children: [
               for(var item in list)
                 Text(
                     item.toString(),
@@ -151,14 +247,14 @@ class _GamePageState extends State<GamePage> {
                 ),
               TextButton(
                 onPressed: _handleClickButton, //เอาฟังก์ชันมาใส่ (call back function) ไม่ใช่การ call function
-                *//**//*onPressed: () { //เมื่อกดปุ่มแล้วจะ เรียกฟังก์ชันนี้เพื่อ Render UI ใหม่
+                */ /**/ /*onPressed: () { //เมื่อกดปุ่มแล้วจะ เรียกฟังก์ชันนี้เพื่อ Render UI ใหม่
                   setState(() { //เพื่อเปลี่ยนแปลงค่าตัวแปรที่แสดงผล (เรียก method build ใหม่)
                     i++;
                   });
-                },*//**//*
+                },*/ /**/ /*
                 child: Text('Test'),
               ),
-            ],*//*
+            ],*/ /*
           ),
         ),
       ),
